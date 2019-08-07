@@ -8,7 +8,27 @@ ALIVE_LIMIT="$5"
 
 MYSQLCONTROL="mysql -u detector -p$MYSQL_DETECTOR_PASSWORD -D silenceDB -P $MYSQL_PORT -h $MYSQL_HOST --skip-column-names"
 
-echo "select alive from status where mntpnt = '$MOUNTPOINT' and alive < ( UNIX_TIMESTAMP() - $ALIVE_LIMIT );" | $MYSQLCONTROL
+# NO DB ENTRY
+echo "select mntpnt from status where mntpnt = '$MOUNTPOINT';" | $MYSQLCONTROL | grep "$MOUNTPOINT" > /dev/null
+if [ $? -ne 0 ]; then
+    echo "1|Not found in database."
+    exit 0
+fi
+
+# DB ENTRY TOO OLD
+echo "select mntpnt from status where mntpnt = '$MOUNTPOINT' and alive < ( UNIX_TIMESTAMP() - $ALIVE_LIMIT );" | $MYSQLCONTROL | grep "$MOUNTPOINT" > /dev/null
+if [ $? -eq 0 ]; then
+    echo "1|Found in database but too old."
+    exit 0
+fi
+
+
+# SILENT
+echo "select status,since from status where mntpnt = '$MOUNTPOINT' and alive >= ( UNIX_TIMESTAMP() - $ALIVE_LIMIT );" | $MYSQLCONTROL
+#if [ $? -eq 0 ]; then
+#    echo "1|Found in database but too old."
+#fi
+
 
 
 
