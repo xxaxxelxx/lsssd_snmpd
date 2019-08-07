@@ -1,12 +1,16 @@
 #!/bin/bash
-test $# -lt 4 && exit 1
+test $# -lt 5 && exit 1
 MOUNTPOINT="$1"
 MYSQL_HOST="$2"
 MYSQL_PORT="$3"
 MYSQL_DETECTOR_PASSWORD="$4"
+ALIVE_LIMIT="$5"
 
-MYSQLCONTROL="mysql -u detector -p$MYSQL_DETECTOR_PASSWORD -D silenceDB -P $MYSQL_PORT -h $MYSQL_HOST"
+MYSQLCONTROL="mysql -u detector -p$MYSQL_DETECTOR_PASSWORD -D silenceDB -P $MYSQL_PORT -h $MYSQL_HOST --skip-column-names"
 
-echo "select alive,status,since from status where mntpnt = '$MOUNTPOINT';" | $MYSQLCONTROL
+echo "select alive from status where mntpnt = '$MOUNTPOINT' and alive < ( UNIX_TIMESTAMP() - $ALIVE_LIMIT );" | $MYSQLCONTROL
+
+
+
 
 exit
