@@ -23,11 +23,17 @@ if [ $? -eq 0 ]; then
     exit 0
 fi
 
-
-# SILENT
+# UNDER SURVEILLANCE
 RES="$(echo "select status,since from status where mntpnt = '$MOUNTPOINT' and alive >= ( UNIX_TIMESTAMP() - $ALIVE_LIMIT );" | $MYSQLCONTROL)" #"
 STAT="$(echo "$RES" | awk '{print $1}')"
 SINCE="$(echo "$RES" | awk '{print $2}' | sed 's|^|@|' | TZ=$TZ xargs date +"%Y-%m-%d %H:%M:%S" -d)"
 
+if [ $STAT -ne 0 ]; then
+    echo "2|Seit $SINCE"
+else
+    echo "0|Seit $SINCE"
+fi
 
-exit
+exit 0
+
+# END
