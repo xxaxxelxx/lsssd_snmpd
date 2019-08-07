@@ -12,8 +12,8 @@ test -r "snmpd.conf" && (
 
 while true; do
 #    ./confupdater.sh 192.168.100.124 63306 rfc1830 10 Europe/Berlin
-#    ./confupdater.sh $MYSQL_HOST $MYSQL_PORT $MYSQL_DETECTOR_PASSWORD $ALIVE_LIMIT $TZ
-    echo "$MYSQL_HOST $MYSQL_PORT $MYSQL_DETECTOR_PASSWORD $ALIVE_LIMIT $TZ" > aaaa
+    ./confupdater.sh $MYSQL_HOST $MYSQL_PORT $MYSQL_DETECTOR_PASSWORD $ALIVE_LIMIT $TZ
+#    echo "$MYSQL_HOST $MYSQL_PORT $MYSQL_DETECTOR_PASSWORD $ALIVE_LIMIT $TZ" > aaaa
     sleep 10
 done
 exit $?
