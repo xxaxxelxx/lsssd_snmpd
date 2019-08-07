@@ -5,9 +5,9 @@ set -ex
 echo "$1" | grep -i '^exit' > /dev/null && exit 0
 
 test -r "snmpd.conf" && (
-	sed -e "s|<SNMPD_HOST>|${SNMPD_HOST}|g" -i snmpd.conf
-	sed -e "s|<SNMPD_COMMUNITY>|${SNMPD_COMMUNITY}|g" -i snmpd.conf 
-	)
+    sed -e "s|<SNMPD_HOST>|${SNMPD_HOST}|g" -i snmpd.conf
+    sed -e "s|<SNMPD_COMMUNITY>|${SNMPD_COMMUNITY}|g" -i snmpd.conf 
+    )
 
 
 while true; do
