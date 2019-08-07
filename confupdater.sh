@@ -23,27 +23,22 @@ MYSQLCONTROL="mysql -u detector -p$DB_PASS -D silenceDB -P $DB_PORT -h $DB_HOST 
 
 while true; do
     # STARTUP
+    C_MD5_PRE="$C_MD5"
     C_MNTPNTLIST="$(echo "SELECT mntpnt FROM status;" | mysql -u detector -p$DB_PASS -h $DB_HOST -P $DB_PORT -D silenceDB --skip-column-names)" #"
+    C_MD5="$(echo "$C_MNTPNTLIST" | md5sum | awk '{print $1}')"
+    test "x$C_MD5_PRE" == "x$C_MD5" && sleep 10 && continue
+    SNMPD_EXTEND_BLOCK=""
     for C_MNTPNT in $C_MNTPNTLIST; do
     C_MNTPNT_ID="$(echo "$C_MNTPNT" | sed 's|.*\:\/\/||' | sed 's|\.|\_|g' | sed 's|\/|\_|g')" #"
-
     SNMPD_EXTEND_BLOCK=$"${SNMPD_EXTEND_BLOCK}|extend $C_MNTPNT_ID ask_mysql.sh $C_MNTPNT $DB_HOST $DB_PORT $DB_PASS $ALIVE_LIMIT $TZ"
-
     done 
 
     test -r snmpd.conf && cp -f snmpd.conf /etc/snmp/snmpd.conf && \
     echo "$SNMPD_EXTEND_BLOCK" | tr '\|' '\n' >> /etc/snmp/snmpd.conf
-
-    exit
+    
+    #pkill -HUP snmpd
     sleep 1
 done
-
-
-
-
-
-
-
 
 exit $?
 
