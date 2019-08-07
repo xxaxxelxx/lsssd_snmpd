@@ -13,10 +13,10 @@ RUN apt-get install -y snmpd
 # clean up
 RUN apt-get clean
 
-COPY snmpd.conf /etc/snmp/snmpd.conf
+COPY snmpd.conf /snmpd.conf
 COPY test.sh /test.sh
 COPY ask_mysql.sh /ask_mysql.sh
-COPY updater.sh /updater.sh
+COPY confupdater.sh /confupdater.sh
 COPY entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT [ "/entrypoint.sh" ]

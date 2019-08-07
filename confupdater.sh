@@ -1,34 +1,25 @@
 #!/bin/bash
-test  $# -lt 8 && \
-    echo "usage:   $(basename $0) INTERFACE INTERFACESPEEDMBIT MAXNETLOADPERCENT MAXCPULOADPERCENT DB_HOST DB_PORT DB_PASS ALIVE_LIMIT" && \
-    echo "example: $(basename $0) ens3 1000 50 30 192.168.99.99 3306 trallala 10.0" && \
+test  $# -lt 5 && \
+    echo "usage:   $(basename $0) DB_HOST DB_PORT DB_PASS ALIVE_LIMIT TZ" && \
+    echo "example: $(basename $0) 192.168.99.99 3306 mymysqlpass 10 Europe/Berlin" && \
     exit 1
 
-CIF=$1
-test "x$CIF" == "x" && exit 1
-
-CIF_SPEED=$2
-test "x$CIF_SPEED" == "x" && exit 1
-
-MAXNETLOAD=$3
-test "x$MAXNETLOAD" == "x" && exit 1
-
-MAXCPULOAD=$4
-test "x$MAXCPULOAD" == "x" && exit 1
-
-DB_HOST=$5
+DB_HOST=$1
 test "x$DB_HOST" == "x" && exit 1
 
-DB_PORT=$6
+DB_PORT=$2
 test "x$DB_PORT" == "x" && exit 1
 
-DB_PASS=$7
+DB_PASS=$3
 test "x$DB_PASS" == "x" && exit 1
 
-ALIVE_LIMIT=$8
+ALIVE_LIMIT=$4
 test "x$ALIVE_LIMIT" == "x" && exit 1
 
-test -d "/var/run/liquidsoap" || (mkdir -p "/var/run/liquidsoap" && chown liquidsoap "/var/run/liquidsoap")
+TZ=$5
+test "x$TZ" == "x" && exit 1
+
+MYSQLCONTROL="mysql -u detector -p$DB_PASS -D silenceDB -P $DB_PORT -h $DB_HOST --skip-column-names"
 
 while true; do
     # STARTUP
