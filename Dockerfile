@@ -15,6 +15,7 @@ RUN apt-get clean
 
 COPY snmpd.conf /etc/snmp/snmpd.conf
 COPY test.sh /test.sh
+COPY ask_mysql.sh /ask_mysql.sh
 COPY updater.sh /updater.sh
 COPY entrypoint.sh /entrypoint.sh
 
