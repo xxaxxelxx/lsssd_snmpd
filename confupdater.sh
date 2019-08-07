@@ -34,10 +34,10 @@ while true; do
     done 
 
     test -r snmpd.conf && cp -f snmpd.conf /etc/snmp/snmpd.conf && \
-    echo "$SNMPD_EXTEND_BLOCK" | tr '\|' '\n' >> /etc/snmp/snmpd.conf
-    
-    #pkill -HUP snmpd
+    echo "$SNMPD_EXTEND_BLOCK" | tr '\|' '\n' > /etc/snmp/extend.conf
+
     sleep 1
+    ps waux | grep snmpd | grep -v grep > /dev/null && pkill -HUP snmpd || snmpd -c /etc/snmp/extend.conf
 done
 
 exit $?
