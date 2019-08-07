@@ -14,9 +14,6 @@ RUN apt-get install -y snmpd
 RUN apt-get clean
 
 COPY snmpd.conf /etc/snmp/snmpd.conf
-RUN sed -e "s|<SNMPD_HOST>|${ENV_SNMPD_HOST}|g" -i /etc/snmp/snmpd.conf
-RUN sed -e "s|<SNMPD_COMMUNITY>|${ENV_SNMPD_COMMUNITY}|g" -i /etc/snmp/snmpd.conf
-
 COPY test.sh /test.sh
 COPY updater.sh /updater.sh
 COPY entrypoint.sh /entrypoint.sh
