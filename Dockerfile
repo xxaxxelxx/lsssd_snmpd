@@ -10,6 +10,7 @@ RUN apt-get -qq -y dist-upgrade
 RUN apt-get -qq -y install mc
 RUN apt-get install -y mariadb-client
 RUN apt-get install -y snmpd
+RUN apt-get install -y ssh
 # clean up
 RUN apt-get clean
 
