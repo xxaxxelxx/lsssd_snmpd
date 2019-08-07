@@ -24,13 +24,11 @@ fi
 
 
 # SILENT
-echo "select status,since from status where mntpnt = '$MOUNTPOINT' and alive >= ( UNIX_TIMESTAMP() - $ALIVE_LIMIT );" | $MYSQLCONTROL
-#if [ $? -eq 0 ]; then
-#    echo "1|Found in database but too old."
-#fi
+RES="$(echo "select status,since from status where mntpnt = '$MOUNTPOINT' and alive >= ( UNIX_TIMESTAMP() - $ALIVE_LIMIT );" | $MYSQLCONTROL)" #"
+STAT="$(echo "$RES" | awk '{print $1}')"
+SINCE="$(echo "$RES" | awk '{print $2}' | sed 's|^|@|' | date +"%Y-%m-%d %H:%M:%S")"
 
-
-
+echo $SINCE
 
 
 exit
