@@ -25,8 +25,8 @@ while true; do
     # STARTUP
     C_MD5_PRE="$C_MD5"
     C_MNTPNTLIST="$(echo "SELECT mntpnt FROM status;" | mysql -u detector -p$DB_PASS -h $DB_HOST -P $DB_PORT -D silenceDB --skip-column-names)" #"
-    sleep 10; continue
     C_MD5="$(echo "$C_MNTPNTLIST" | md5sum | awk '{print $1}')"
+    sleep 10; continue
     test "x$C_MD5_PRE" == "x$C_MD5" && sleep 60 && continue
     SNMPD_EXTEND_BLOCK=""
     for C_MNTPNT in $C_MNTPNTLIST; do
