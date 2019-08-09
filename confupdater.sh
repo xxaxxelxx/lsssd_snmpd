@@ -26,9 +26,10 @@ while true; do
     C_MD5_PRE="$C_MD5"
     C_MNTPNTLIST="$(echo "SELECT mntpnt FROM status;" | mysql -u detector -p$DB_PASS -h $DB_HOST -P $DB_PORT -D silenceDB --skip-column-names)" #"
     C_MD5="$(echo "$C_MNTPNTLIST" | md5sum | awk '{print $1}')"
-    echo "x$C_MD5_PRE vs x$C_MD5" > MD5
+#    echo "x$C_MD5_PRE vs x$C_MD5" > MD5
     test "x$C_MD5_PRE" == "x$C_MD5" && sleep 60 && continue
-    sleep 10; continue
+    echo "x$C_MD5_PRE vs x$C_MD5" > MD5X
+#    sleep 10; continue
     SNMPD_EXTEND_BLOCK=""
     for C_MNTPNT in $C_MNTPNTLIST; do
 	C_MNTPNT_ID="$(echo "$C_MNTPNT" | sed 's|.*\:\/\/||' | sed 's|\.|\_|g' | sed 's|\/|\_|g')" #"
