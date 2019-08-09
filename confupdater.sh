@@ -30,7 +30,7 @@ while true; do
     C_MD5="$(echo "$C_MNTPNTLIST" | md5sum | awk '{print $1}')"
     date > C
 #    echo "x$C_MD5_PRE vs x$C_MD5" > MD5
-    sleep 10; continue
+    #sleep 10; continue
     test "x$C_MD5_PRE" == "x$C_MD5" && sleep 60 && continue
     date > D
     echo "x$C_MD5_PRE vs x$C_MD5" > MD5X
