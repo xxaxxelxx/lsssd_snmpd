@@ -26,19 +26,15 @@ test -r "$WATCHLIST" || exit 1
 MYSQLCONTROL="mysql -u detector -p$DB_PASS -D silenceDB -P $DB_PORT -h $DB_HOST --skip-column-names"
 
 while true; do
-#    C_MD5_PRE="$C_MD5"
-#    C_MNTPNTLIST="$(echo "SELECT mntpnt FROM status;" | mysql -u detector -p$DB_PASS -h $DB_HOST -P $DB_PORT -D silenceDB --skip-column-names)" #"
-#    C_MD5="$(echo "$C_MNTPNTLIST" | md5sum | awk '{print $1}')"
-#    test "x$C_MD5_PRE" == "x$C_MD5" && sleep 600 && continue
     MD5SUMPRE="$MD5SUM"
     MD5SUM="$(cat "$WATCHLIST" | grep -v -e '^#' -e '^\s*$' | awk '{print $1}' | md5sum | awk '{print $1}')"
     test "x$MD5SUMPRE" == "x$MD5SUM" && sleep 10 && continue
 
-    date > DATE
+    C_MNTPNTLIST="$(cat "$WATCHLIST" | grep -v -e '^#' -e '^\s*$' | awk '{print $1}')"
 
     SNMPD_EXTEND_BLOCK=""
     for C_MNTPNT in $C_MNTPNTLIST; do
-	C_MNTPNT_ID="$(echo "$C_MNTPNT" | sed 's|.*\:\/\/||' | sed 's|\.|\_|g' | sed 's|\/|\_|g')" #"
+	C_MNTPNT_ID="$(echo "$C_MNTPNT" | sed 's|.*\:\/\/||' | sed 's|\.|\_|g' | sed 's|\/|\_|g')"
 	SNMPD_EXTEND_BLOCK=$"${SNMPD_EXTEND_BLOCK}|extend $C_MNTPNT_ID ask_mysql.sh $C_MNTPNT $DB_HOST $DB_PORT $DB_PASS $ALIVE_LIMIT $TZ"
     done 
 
