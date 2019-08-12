@@ -31,7 +31,7 @@ while true; do
     #date > C
 #    echo "x$C_MD5_PRE vs x$C_MD5" > MD5
     #sleep 10; continue
-    test "x$C_MD5_PRE" == "x$C_MD5" && sleep 60 && continue
+    test "x$C_MD5_PRE" == "x$C_MD5" && sleep 600 && continue
     #date > D
     #echo "x$C_MD5_PRE vs x$C_MD5" > MD5X
     #date > E
