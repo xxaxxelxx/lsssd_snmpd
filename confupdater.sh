@@ -19,23 +19,23 @@ test "x$ALIVE_LIMIT" == "x" && exit 1
 TZ=$5
 test "x$TZ" == "x" && exit 1
 
+WATCHLIST="/volumes/CommandVolume/WATCHLIST"
+test "x$WATCHLIST" == "x" && exit 1
+test -r "$WATCHLIST" || exit 1
+
 MYSQLCONTROL="mysql -u detector -p$DB_PASS -D silenceDB -P $DB_PORT -h $DB_HOST --skip-column-names"
 
 while true; do
-    # STARTUP
-    C_MD5_PRE="$C_MD5"
-    #date > A
-    C_MNTPNTLIST="$(echo "SELECT mntpnt FROM status;" | mysql -u detector -p$DB_PASS -h $DB_HOST -P $DB_PORT -D silenceDB --skip-column-names)" #"
-    #date > B
-    C_MD5="$(echo "$C_MNTPNTLIST" | md5sum | awk '{print $1}')"
-    #date > C
-#    echo "x$C_MD5_PRE vs x$C_MD5" > MD5
-    #sleep 10; continue
-    test "x$C_MD5_PRE" == "x$C_MD5" && sleep 600 && continue
-    #date > D
-    #echo "x$C_MD5_PRE vs x$C_MD5" > MD5X
-    #date > E
-#    sleep 10; continue
+#    C_MD5_PRE="$C_MD5"
+#    C_MNTPNTLIST="$(echo "SELECT mntpnt FROM status;" | mysql -u detector -p$DB_PASS -h $DB_HOST -P $DB_PORT -D silenceDB --skip-column-names)" #"
+#    C_MD5="$(echo "$C_MNTPNTLIST" | md5sum | awk '{print $1}')"
+#    test "x$C_MD5_PRE" == "x$C_MD5" && sleep 600 && continue
+    MD5SUMPRE="$MD5SUM"
+    MD5SUM="$(cat "$WATCHLIST" | grep -v -e '^#' -e '^\s*$' | awk '{print $1}' | md5sum | awk '{print $1}')"
+    test "x$MD5SUMPRE" == "x$MD5SUM" && sleep 10 && continue
+
+    date > DATE
+
     SNMPD_EXTEND_BLOCK=""
     for C_MNTPNT in $C_MNTPNTLIST; do
 	C_MNTPNT_ID="$(echo "$C_MNTPNT" | sed 's|.*\:\/\/||' | sed 's|\.|\_|g' | sed 's|\/|\_|g')" #"
@@ -47,6 +47,7 @@ while true; do
 
     sleep 1
     ps waux | grep snmpd | grep -v grep > /dev/null && pkill -HUP snmpd || snmpd -c /etc/snmp/extend.conf
+    sleep 10
 done
 
 exit $?
