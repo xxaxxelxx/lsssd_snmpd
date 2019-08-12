@@ -24,17 +24,17 @@ MYSQLCONTROL="mysql -u detector -p$DB_PASS -D silenceDB -P $DB_PORT -h $DB_HOST 
 while true; do
     # STARTUP
     C_MD5_PRE="$C_MD5"
-    date > A
+    #date > A
     C_MNTPNTLIST="$(echo "SELECT mntpnt FROM status;" | mysql -u detector -p$DB_PASS -h $DB_HOST -P $DB_PORT -D silenceDB --skip-column-names)" #"
-    date > B
+    #date > B
     C_MD5="$(echo "$C_MNTPNTLIST" | md5sum | awk '{print $1}')"
-    date > C
+    #date > C
 #    echo "x$C_MD5_PRE vs x$C_MD5" > MD5
     #sleep 10; continue
     test "x$C_MD5_PRE" == "x$C_MD5" && sleep 60 && continue
-    date > D
-    echo "x$C_MD5_PRE vs x$C_MD5" > MD5X
-    date > E
+    #date > D
+    #echo "x$C_MD5_PRE vs x$C_MD5" > MD5X
+    #date > E
 #    sleep 10; continue
     SNMPD_EXTEND_BLOCK=""
     for C_MNTPNT in $C_MNTPNTLIST; do
