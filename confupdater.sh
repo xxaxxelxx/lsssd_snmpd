@@ -27,8 +27,7 @@ MYSQLCONTROL="mysql -u detector -p$DB_PASS -D silenceDB -P $DB_PORT -h $DB_HOST 
 
 while true; do
 
-    ps waux | grep snmpd | grep -v grep > /dev/null && sleep 10 && continue
-
+#    ps waux | grep snmpd | grep -v grep > /dev/null && sleep 10 && continue
     MD5SUMPRE="$MD5SUM"
     MD5SUM="$(cat "$WATCHLIST" | grep -v -e '^#' -e '^\s*$' | awk '{print $1}' | md5sum | awk '{print $1}')"
     test "x$MD5SUMPRE" == "x$MD5SUM" && sleep 10 && continue
