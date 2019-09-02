@@ -23,7 +23,7 @@ WATCHLIST="/volumes/CommandVolume/WATCHLIST"
 test "x$WATCHLIST" == "x" && exit 1
 test -r "$WATCHLIST" || exit 1
 
-MYSQLCONTROL="mysql -u detector -p$DB_PASS -D silenceDB -P $DB_PORT -h $DB_HOST --skip-column-names"
+MYSQLCONTROL="mysql -u detector -p$DB_PASS -D silenceDB -P $DB_PORT -h $DB_HOST --skip-column-names --connect-timeout=10"
 
 while true; do
     MD5SUMPRE="$MD5SUM"

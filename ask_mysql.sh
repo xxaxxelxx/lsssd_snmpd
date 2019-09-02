@@ -7,7 +7,7 @@ MYSQL_DETECTOR_PASSWORD="$4"
 ALIVE_LIMIT="$5"
 TZ="$6"
 
-MYSQLCONTROL="mysql -u detector -p$MYSQL_DETECTOR_PASSWORD -D silenceDB -P $MYSQL_PORT -h $MYSQL_HOST --skip-column-names"
+MYSQLCONTROL="mysql -u detector -p$MYSQL_DETECTOR_PASSWORD -D silenceDB -P $MYSQL_PORT -h $MYSQL_HOST --skip-column-names --connect-timeout=10"
 
 # UNDER SURVEILLANCE
 RES="$(echo "select status,since from status where mntpnt = '$MOUNTPOINT' and alive >= ( UNIX_TIMESTAMP() - $ALIVE_LIMIT );" | $MYSQLCONTROL)" #"
